@@ -8,7 +8,7 @@
 void checkWord(char *enteredWord, char *word);
 
 int main() {
-    char word[WORD_LENGTH + 1] = "great";  // Ensure null-terminated string
+    char word[WORD_LENGTH + 1] = "great";
     char enteredWord[WORD_LENGTH + 1];
     int attempts = 0;
     printf("Welcome to WORDLE GAME!\n");
@@ -38,31 +38,28 @@ int main() {
 
 void checkWord(char *enteredWord, char *word) {
     bool correct[WORD_LENGTH] = {false};
-    bool exists[WORD_LENGTH] = {false};
-
+    bool checked[WORD_LENGTH] = {false};
     for (int i = 0; i < WORD_LENGTH; i++) {
         if (enteredWord[i] == word[i]) {
             correct[i] = true;
+            checked[i] = true;
         }
     }
-
     for (int i = 0; i < WORD_LENGTH; i++) {
         if (!correct[i]) {
             for (int j = 0; j < WORD_LENGTH; j++) {
-                if (i != j && enteredWord[i] == word[j] && !correct[j] && !exists[j]) {
-                    exists[i] = true;
+                if (!checked[j] && enteredWord[i] == word[j]) {
+                    checked[j] = true;
+                    printf("Letter %c is in the word but in the wrong position.\n", enteredWord[i]);
                     break;
                 }
             }
         }
     }
-
     for (int i = 0; i < WORD_LENGTH; i++) {
         if (correct[i]) {
             printf("Letter %c at position %d is correct.\n", enteredWord[i], i + 1);
-        } else if (exists[i]) {
-            printf("Letter %c is in the word but in the wrong position.\n", enteredWord[i]);
-        } else {
+        } else if (!checked[i]) {
             printf("Letter %c is not in the word.\n", enteredWord[i]);
         }
     }
